@@ -24,8 +24,7 @@ export const dtoValidationMiddleware = [
     .notEmpty()
     .withMessage('Контент обязательный')
     .isLength({ max: 1000 })
-    .withMessage('Максимум 1000 символов')
-    .withMessage('Невалидный формат'),
+    .withMessage('Максимум 1000 символов'),
   body('blogId')
     .isString()
     .withMessage('Ожидается строка')

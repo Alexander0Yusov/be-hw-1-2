@@ -3,10 +3,16 @@ import express from 'express';
 import { setupApp } from '../../../setup-app';
 import { HttpStatus } from '../../../core/types/HttpStatus';
 import { createFakeBlog } from '../../utils/blogs/create-fake-blog';
-import { BLOGS_PATH, TESTING_PATH } from '../../../core/paths/paths';
+import {
+  BLOGS_PATH,
+  POSTS_PATH,
+  TESTING_PATH,
+} from '../../../core/paths/paths';
 import { generateBasicAuthToken } from '../../utils/generateBasicAuthToken';
+import { createFakePost } from '../../utils/posts/create-fake-post';
+import { PostInputDto } from '../../../2-posts/dto/post-input.dto';
 
-describe('Blog API body validation check', () => {
+describe('Post API body validation check', () => {
   const app = express();
   setupApp(app);
 
@@ -16,50 +22,55 @@ describe('Blog API body validation check', () => {
       .expect(HttpStatus.NoContent);
   });
 
-  it(`❌ should not create blog when incorrect body passed; POST /api/blogs'`, async () => {
+  it(`❌ should not create post when incorrect body passed; POST /api/posts'`, async () => {
     await request(app)
-      .post(BLOGS_PATH)
-      .send(createFakeBlog())
+      .post(POSTS_PATH)
+      .send(createFakePost())
       .expect(HttpStatus.Unauthorized);
 
     const invalidDataSet1 = await request(app)
-      .post(BLOGS_PATH)
+      .post(POSTS_PATH)
       .set('Authorization', generateBasicAuthToken())
       .send(
-        createFakeBlog({
-          name: '     ', // empty string
-          description: '    ', // empty string
-          websiteUrl: '    ', // empty string + invalid format
+        createFakePost({
+          title: '     ', // empty string
+          shortDescription: '    ', // empty string
+          content: '    ', // empty string
+          blogId: '   ', // empty string
         }),
       )
       .expect(HttpStatus.BadRequest);
+
     expect(invalidDataSet1.body.errorsMessages).toHaveLength(4);
 
     const invalidDataSet2 = await request(app)
-      .post(BLOGS_PATH)
+      .post(POSTS_PATH)
       .set('Authorization', generateBasicAuthToken())
       .send(
-        createFakeBlog({
-          name: '0'.repeat(16), // more than max symbols
-          description: '0'.repeat(501), // more than max symbols
-          websiteUrl: 'http://localhost:5001/api/blogs2' + '0'.repeat(101), // incorrect url + more than max symbols
+        createFakePost({
+          title: '0'.repeat(31), // more than max symbols
+          shortDescription: '0'.repeat(101), // more than max symbols
+          content: '0'.repeat(1001), // more than max symbols
+          blogId: '123',
         }),
       )
       .expect(HttpStatus.BadRequest);
 
-    expect(invalidDataSet2.body.errorsMessages).toHaveLength(4);
+    expect(invalidDataSet2.body.errorsMessages).toHaveLength(3);
 
     const invalidDataSet3 = await request(app)
-      .post(BLOGS_PATH)
+      .post(POSTS_PATH)
       .set('Authorization', generateBasicAuthToken())
       .send(
-        createFakeBlog({
+        createFakePost({
           // @ts-ignore
-          name: 123, // incorrect type
+          title: 123, // incorrect type
           // @ts-ignore
-          description: 123, // incorrect type
+          shortDescription: 123, // incorrect type
           // @ts-ignore
-          websiteUrl: 123, // incorrect url + incorrect type
+          content: 123, // incorrect type
+          // @ts-ignore
+          blogId: 123, // incorrect type
         }),
       )
       .expect(HttpStatus.BadRequest);
@@ -67,10 +78,8 @@ describe('Blog API body validation check', () => {
     expect(invalidDataSet3.body.errorsMessages).toHaveLength(4);
 
     // check что никто не создался
-    const blogListResponse = await request(app)
-      .get(BLOGS_PATH)
-      .set('Authorization', generateBasicAuthToken());
+    const postListResponse = await request(app).get(POSTS_PATH);
 
-    expect(blogListResponse.body).toHaveLength(0);
+    expect(postListResponse.body).toHaveLength(0);
   });
 });
