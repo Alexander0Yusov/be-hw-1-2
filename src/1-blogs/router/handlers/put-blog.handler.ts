@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
-
 import { blogsRepository } from '../../repository/blogs.repository';
-import { createErrorMessages } from '../../../core/utils/error.utils';
 import { HttpStatus } from '../../../core/types/HttpStatus';
+import { createErrorMessages } from '../../../core/utils/error.utils';
 
-export function getBlogByIdHandler(req: Request, res: Response) {
-  const blog = blogsRepository.findById(req.params.id);
+export function putBlogHandler(req: Request, res: Response) {
+  const blog = blogsRepository.update(req.params.id, req.body);
 
   if (!blog) {
     res
@@ -14,5 +13,5 @@ export function getBlogByIdHandler(req: Request, res: Response) {
     return;
   }
 
-  res.send(blog);
+  res.sendStatus(HttpStatus.NoContent);
 }

@@ -1,8 +1,9 @@
 import { Blog } from '../1-blogs/types/blog';
+import { Post } from '../2-posts/types/post';
 
 export const db: {
   blogs: Blog[];
-  //   posts: TPost[];
+  posts: Post[];
 } = {
   blogs: [
     {
@@ -18,5 +19,22 @@ export const db: {
       websiteUrl: 'http://localhost:5001/api/blogs3',
     },
   ],
-  //   posts: [],
+  posts: [
+    {
+      id: '1',
+      title: 'post title',
+      shortDescription: 'some description',
+      content: 'some content',
+      blogId: '1',
+      blogName: 'blogname1',
+    },
+    {
+      id: '2',
+      title: 'post title',
+      shortDescription: 'some description',
+      content: 'some content',
+      blogId: '2',
+      blogName: 'blogname2',
+    },
+  ],
 };

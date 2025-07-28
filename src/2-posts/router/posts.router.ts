@@ -4,37 +4,37 @@ import { errorsCatchMiddleware } from '../../core/middlewares/validation/errors-
 import { superAdminGuardMiddleware } from '../../core/middlewares/validation/super-admin-guard.middleware';
 import { dtoValidationMiddleware } from '../validation/dto-validation.middleware';
 import {
-  deleteBlogHandler,
-  getBlogHandler,
-  getBlogListHandler,
-  postBlogHandler,
-  putBlogHandler,
+  deletePostHandler,
+  getPostHandler,
+  getPostListHandler,
+  postPostHandler,
+  putPostHandler,
 } from './handlers';
 
-export const blogsRouter = Router({});
+export const postsRouter = Router({});
 
-blogsRouter
-  .get('', getBlogListHandler)
+postsRouter
+  .get('', getPostListHandler)
   .post(
     '',
     superAdminGuardMiddleware,
     dtoValidationMiddleware,
     errorsCatchMiddleware,
-    postBlogHandler,
+    postPostHandler,
   )
-  .get('/:id', idValidationMiddleware, errorsCatchMiddleware, getBlogHandler)
+  .get('/:id', idValidationMiddleware, errorsCatchMiddleware, getPostHandler)
   .put(
     '/:id',
     superAdminGuardMiddleware,
     idValidationMiddleware,
     dtoValidationMiddleware,
     errorsCatchMiddleware,
-    putBlogHandler,
+    putPostHandler,
   )
   .delete(
     '/:id',
     superAdminGuardMiddleware,
     idValidationMiddleware,
     errorsCatchMiddleware,
-    deleteBlogHandler,
+    deletePostHandler,
   );

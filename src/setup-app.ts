@@ -1,9 +1,8 @@
 import express, { Express } from 'express';
-import { db } from './db/in-memory.db';
-
+import { BLOGS_PATH, POSTS_PATH, TESTING_PATH } from './core/paths/paths';
 import { blogsRouter } from './1-blogs/router/blogs.router';
-import { BLOGS_PATH } from './core/paths/paths';
-import { HttpStatus } from './core/types/HttpStatus';
+import { postsRouter } from './2-posts/router/posts.router';
+import { testRouter } from './3-testing/router/tests.router';
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
@@ -13,11 +12,8 @@ export const setupApp = (app: Express) => {
   });
 
   app.use(BLOGS_PATH, blogsRouter);
-  app.use('/posts', () => {});
+  app.use(POSTS_PATH, postsRouter);
+  app.use(TESTING_PATH, testRouter);
 
-  app.delete('/testing/all-data', (req, res) => {
-    db.blogs = [];
-    res.sendStatus(HttpStatus.NoContent);
-  });
   return app;
 };
