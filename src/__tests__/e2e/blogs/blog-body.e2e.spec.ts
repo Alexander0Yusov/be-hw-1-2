@@ -33,7 +33,7 @@ describe('Blog API body validation check', () => {
         }),
       )
       .expect(HttpStatus.BadRequest);
-    expect(invalidDataSet1.body.errorsMessages).toHaveLength(4);
+    expect(invalidDataSet1.body.errorsMessages).toHaveLength(3);
 
     const invalidDataSet2 = await request(app)
       .post(BLOGS_PATH)
@@ -47,7 +47,7 @@ describe('Blog API body validation check', () => {
       )
       .expect(HttpStatus.BadRequest);
 
-    expect(invalidDataSet2.body.errorsMessages).toHaveLength(4);
+    expect(invalidDataSet2.body.errorsMessages).toHaveLength(3);
 
     const invalidDataSet3 = await request(app)
       .post(BLOGS_PATH)
@@ -64,7 +64,7 @@ describe('Blog API body validation check', () => {
       )
       .expect(HttpStatus.BadRequest);
 
-    expect(invalidDataSet3.body.errorsMessages).toHaveLength(4);
+    expect(invalidDataSet3.body.errorsMessages).toHaveLength(3);
 
     // check что никто не создался
     const blogListResponse = await request(app)

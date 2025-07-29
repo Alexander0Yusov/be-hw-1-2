@@ -19,7 +19,7 @@ export const errorsCatchMiddleware = (
 ) => {
   const errors = validationResult(req)
     .formatWith(formatErrors)
-    .array({ onlyFirstError: false }); // value true is in my case
+    .array({ onlyFirstError: true }); // value true is in my case
 
   if (errors.length) {
     return res.status(HttpStatus.BadRequest).json({ errorsMessages: errors });
