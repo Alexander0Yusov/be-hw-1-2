@@ -1,4 +1,5 @@
 import express, { Express } from 'express';
+import cors from 'cors';
 import { BLOGS_PATH, POSTS_PATH, TESTING_PATH } from './core/paths/paths';
 import { blogsRouter } from './1-blogs/router/blogs.router';
 import { postsRouter } from './2-posts/router/posts.router';
@@ -7,6 +8,7 @@ import { setupSwagger } from './core/swagger/setup-swagger';
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
+  app.use(cors());
 
   app.get('/', (req, res) => {
     res.status(200).send('Hello world!');
